@@ -1,0 +1,197 @@
+#!/usr/bin/perl
+
+# Converts a Creole formatted file into an equivalent Markdown
+# version. This uses the convention of the '---' block for metadata at
+# the top of the file. It also pulls the LocalWords dictionary and the
+# summary up into the metadata.
+
+# USAGE: creole2markdown <directory|file>
+
+#
+# Setup
+#
+
+# Directives
+use strict;
+use warnings;
+
+# Modules
+use File::Find;
+use File::Basename;
+use Getopt::Long;
+
+#
+# Command-Line Processing
+#
+
+# Grab the options from the command line.
+my $delete = 0;
+
+GetOptions("delete" => \$delete);
+
+# Go through the directories left on the argument list.
+finddepth(\&process, @ARGV);
+
+sub process
+{
+	# Pull out the elements we care about.
+	my $dir = $File::Find::dir;
+	my $filename = $_;
+	my $filepath = $File::Find::name;
+	$filepath = "./" . $filepath unless $filepath =~ /^\./;
+
+	# If it isn't a file, we don't do anything extra.
+	return unless (-f $_);
+	return unless ($_ =~ /\.txt/);
+
+	# Report what we're processing.
+	#print "$filepath";
+
+	# We have two sections in the resulting MarkDown file. The top is
+	# the metadata section, which is not rendered, and the bottom is
+	# the actual contents. In the original Creole, the metadata is a
+	# "#" for the title and a bullet list of metadata, separated by a
+	# newline.
+	my @metadata = ();
+	my @contents = ();
+	my $found_blank_line = 0;
+	my $last_was_blank = 0;
+
+	# Open up a file and stream through it.
+	open INPUT, "<$filename" or die "Cannot open $filepath ($!)";
+
+	while (<INPUT>)
+	{
+		# Clean up the line.
+		chomp;
+		
+		# If we have a "#", this is a level one heading which becomes the title.
+		if ($found_blank_line)
+		{
+			# We can encounter a couple lines that will eventually
+			# become metadata. In specific, "LocalWords:" for Emacs
+			# spell-checking and "SUMMARY:" which is the summary.
+			if (/^SUMMARY:\s*(.*?)$/)
+			{
+				push @metadata, "Summary: $1";
+				next;
+			}
+
+			if (/^LocalWords:\s*(.*?)$/)
+			{
+				push @metadata, "LocalWords: $1";
+				next;
+			}
+
+			# Skip double-blank lines.
+			if ($_ =~ /^\s*$/)
+			{
+				next if $last_was_blank;
+				$last_was_blank = 1;
+			}
+			else
+			{
+				$last_was_blank = 0;
+			}
+
+			# Fix the italics.
+			s@//@*@sg;
+
+			# This would be the contents.
+			push @contents, $_;
+
+			# We're done with contents.
+			next;
+		}
+
+		# Everything after this is metadata for the file, which is
+		# ended by the newline.
+		if ($_ =~ /^\s*$/)
+		{
+			# Mark that we found a blank line, which means we're done
+			# with metadata parsing.
+			$found_blank_line = 1;
+			$last_was_blank = 1;
+			next;
+		}
+
+		# For metadata, we have two types of lines. Either a "# Title"
+		# which is the title line and "* Key: Value" line which is a
+		# metdata key/value pair.
+		if (/^\=\s*(.*?)\s*$/)
+		{
+			push @metadata, "Title: $1";
+		}
+
+		if (/^\*\s*(.*?)\s*:\s*(.*?)\s*$/)
+		{
+			# Pull out the fields.
+			my $key = $1;
+			my $data = $2;
+
+			# See if this has a semicolon-separated list.
+			if ($data =~ /;/)
+			{
+				# If there are no commas, we can make it a simple list.
+				my @parts = split(/\s*;\s*/, $data);
+
+				if ($data =~ /,/)
+				{
+					# Write it out as a YAML list.
+					push @metadata, "$key:";
+
+					foreach my $part (@parts)
+					{
+						push @metadata, "  - $part";
+					}
+				}
+				else
+				{
+					# Add it as a single-line list.
+					push @metadata, "$key: [" . join(", ", @parts) . "]";
+				}
+			}
+			elsif ($data =~ /,/)
+			{
+				# Split it on the commas.
+				my @parts = split(/\s*,\s*/, $data);
+				push @metadata, "$key: [" . join(", ", @parts) . "]";
+			}
+			else
+			{
+				# Check to see if we have single key elements that
+				# should be an array.
+				my $lc_key = lc($key);
+
+				if ($lc_key eq "theme")
+				{
+					$data = "[$data]";
+				}
+
+				# Push it as a single key.
+				push @metadata, "$key: $data";
+			}
+		}
+	}
+
+	# We're finished with the input handle.
+	close INPUT;
+
+	# Figure out the filename that we'll be writing out.
+	my $basename = $filename;
+	$basename =~ s/\.txt$/.markdown/;
+	#print " -> $basename\n";
+
+	# Open up the file handle.
+	open OUTPUT, ">$basename" or die "Cannot write to $basename ($!)";
+
+	print OUTPUT "---\n";
+	print OUTPUT join("\n", @metadata), "\n";
+	print OUTPUT "---\n\n";
+	print OUTPUT join("\n", @contents), "\n";
+
+	close OUTPUT;
+
+	# Remove the original file.
+	unlink($filename) if $delete;
+}

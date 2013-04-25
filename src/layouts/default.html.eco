@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/i/378 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <!-- Our site title and description -->
+    <title><%= @document.title %></title>
+    <meta name="description" content="<%= @document.description %>" />
+    <meta name="keywords" content="<%= @document.keywords %>" />
+    <meta name="author" content="<%= @site.author or '' %>" />
+
+    <!-- Output DocPad produced meta elements -->
+    <%- @getBlock('meta').toHTML() %>
+
+    <!-- Mobile viewport optimized: h5bp.com/viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/icon-144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/img/icon-114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/icon-72.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/icon-57.png">
+    <meta name="msapplication-TileImage" content="/img/icon-144.png"/>
+	<meta name="msapplication-TileColor" content="<%= @site.windowsTitle %>"/>
+
+    <!-- Shims: IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script async src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Styles -->
+    <%- @getBlock('styles').add(["/css/bootstrap.css","/css/bootstrap-responsive.css","/css/style.css"]).toHTML() %>
+<style>
+@media (min-width: 980px) {
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+}
+</style>
+
+<% if @document.redirectUrl: %>
+<script type="text/javascript">
+<!--
+function redirectDelay(){
+    window.location = "<%= @document.redirectUrl %>"
+}
+//-->
+</script>
+<% end %>
+</head>
+<% if @document.redirectUrl: %>
+<body onLoad="setTimeout('redirectDelay()', 10000)">
+<% else: %>
+<body>
+<% end %>
+  <% if @site.showWarning: %>
+  <!-- Content Warning -->
+  <div id="content-warning">
+	<div id="content-warning-background">
+	  <div id="content-warning-title">Warning!</div>
+	  <div id="content-warning-message">
+<p>You are about to enter a website that may contain content of an adult nature. These pages are designed for <strong>adults</strong> only and may include pictures and materials that some viewers may find offensive. If you are under the age of 21, if such material offends you or if it is illegal to view such material in your community please do not continue. The following terms and conditions apply to this site. Entering the site via the link below will constitute your agreement to the following terms and conditions:</p>
+
+<ul>
+<li>I am 21 years of age or older</li>
+<li>I accept all resposibility for my own actions; and</li>
+<li>I agree that I am legally bound to these Terms and Conditions</li>
+</ul>
+</div>
+	  <div id="content-warning-buttons">
+  	    <a class="btn btn-danger btn-large" onclick="acceptWarning()" href="javascript:void(0)">Enter</a>
+	    <a class="btn btn-large" href="http://www.google.com/">Exit</a>
+	  </div>
+    </div>
+  </div>
+  <% end %>
+
+    <!-- Markup -->
+    <div id="wrapper">
+	  <div id="inner-wrapper">
+        <div class="navbar navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+
+              <a class="brand" href="/"><%= @site.brand %></a>
+ 
+              <div class="nav-collapse">
+                <ul class="nav">
+				  <li><a href="/c/">Characters</a></li>
+				  <li><a href="/t/">Themes</a></li>
+				  <li><a href="/a/">Authors</a></li>
+				  <li><a href="/s/">Sources</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+          </div><!-- div.navbar-inner -->
+        </div><!-- div.navbar.navbar-fixed-top -->
+
+  	    <!-- Menu -->
+        <div class="container">
+		  <!-- Breadcrumbs -->
+		  <% if @document.breadcrumbs: %>
+  		    <ul class="breadcrumb">
+			  <% for crumb in @document.breadcrumbs: %>
+			    <% if crumb.active: %>
+			      <li class="active"><%= crumb.title %></li>
+			    <% else: %>
+			      <li><a href="<%= crumb.relativePath %>"><%= crumb.title %></a> <span class="divider">/</span></li>
+			    <% end %>
+			  <% end %>
+		    </ul>
+          <% end %>
+
+		  <!-- Contents -->
+  		  <%- @content %>
+        </div><!-- div.container -->
+      </div><!-- /div#inner-wrapper -->
+    </div><!-- div#wrapper -->
+
+	<div class="row comments-container">
+	  <div class="offset1 span10">
+		<%- @partial('comments.html.eco', @) %>
+	  </div>
+	</div>
+
+	<!-- Footer -->
+    <!-- Footer
+		 ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p>Designed and managed by <a href="http://d.moonfire.us/">D. Moonfire</a>.</p>
+		<p>Licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+
+        <ul class="footer-links">
+          <li><a href="https://github.com/dmoonfire/sffw">GitHub</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com/dmoonfire/sffw/issues?state=open">Issues</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <%- @getBlock('scripts').add(["http://code.jquery.com/jquery-1.9.1.min.js","/js/log.js","/js/modernizr.js","/js/bootstrap-collapse.js","/js/bootstrap-dropdown.js","/js/flattr.js", "/js/stats.js", "/js/warning.js"]).toHTML() %>
+</body>
+</html>

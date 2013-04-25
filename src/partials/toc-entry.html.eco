@@ -1,0 +1,33 @@
+<div class="chapter">
+  <div class="chapter-title">
+    <h3>
+	  <!-- Include the chapter prefix, if we are showing chapters. -->
+      <% if @document.organization == "Chapters": %>
+         <span class="chapter-number">
+		   Chapter <%= @include.chapterNumber %>:
+		 </span>
+      <% end %>
+
+	  <!-- Include the URL and title -->
+      <a href="<%= @include.url %>/">
+        <%= @include.title %>
+      </a>
+
+	  <!-- Check to see if we have a different author. -->
+	  <% author = @include.author or @site.author %>
+	  <% if author != @site.author: %>
+	    <span class='different-author'>by <%= author %>
+	  <% end %>
+    </h3>
+  </div>
+
+  <% if @include.assm: %>
+    <div class="chapter-assm-container">
+      <span class="chapter-assm-label">ASSM Codes: </span>
+  	  <% index = 0 %>
+      <% for assm in @include.assm: %><span class="chapter-assm"><%= ", " if index != 0 %><% index = index + 1 %><%= assm %><% end %>
+    </div>
+  <% end %>
+
+  <p class="chapter-summary"><%= @include.summary %></p>
+</div>

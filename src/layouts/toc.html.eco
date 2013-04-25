@@ -1,0 +1,14 @@
+---
+layout: page
+---
+
+<%- @content %>
+
+<h2><%= @document.organization %></h2>
+
+<% index = 0 %>
+<% for include in @document.includes: %>
+  <% index = index + 1 %>
+  <% include.chapterNumber = index %>
+  <%- @partial('toc-entry.html.eco', @, {include: include}) %>
+<% end %>

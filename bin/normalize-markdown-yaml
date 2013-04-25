@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+#
+# Setup
+#
+
+# Dirctives
+use strict;
+use warnings;
+
+#
+# Process the input
+#
+
+my $in_yaml = 0;
+my $beyond_yaml = 0;
+
+while (<>)
+{
+	# Check for the separator.
+	if (m/^---$/)
+	{
+		$beyond_yaml = 1 if $in_yaml;
+		$in_yaml = 1 unless $in_yaml;
+		print;
+		next;
+	}
+
+	# If we are in the YAML but not beyond it, normalize it.
+	if ($in_yaml && !$beyond_yaml)
+	{
+		if (s/^(\s*(- )?[A-Z]+)/PLACEHOLDER/)
+		{
+			my $lc = lc($1);
+			s/PLACEHOLDER/$lc/;
+		}
+	}
+
+	# If we have a section, bump it up a level.
+	s@#@##@;
+
+	# Print the line.
+	print;
+}

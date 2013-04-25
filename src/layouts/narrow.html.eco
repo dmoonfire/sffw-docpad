@@ -1,0 +1,12 @@
+---
+layout: default
+---
+
+<div class="row">
+  <!-- Contents -->
+  <div class="offset1 span8">
+    <section id="content" class="content">
+      <%- @content %>
+    </section>
+  </div><!-- div.offset1.span8 -->
+</div><!-- div.row -->

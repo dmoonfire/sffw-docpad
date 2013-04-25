@@ -1,0 +1,7 @@
+include **/
+include *.markdown
+include *.txt
+include *.html
+include *.html.eco
+include index.xml
+exclude *
