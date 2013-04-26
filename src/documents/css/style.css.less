@@ -13,20 +13,28 @@
 .comments-container
 {
 	padding-top: 30px;
-	border-top: @grayDark 1px solid;
+	border-top: @grayLight 1px solid;
+	background: @grayLighter;
 }
 
 /* Footer */
 .footer {
-	text-align: center;
-	padding: 30px 0;
-	margin-top: 30px;
-	border-top: 1px solid @grayDarker;
 	background-color: @gray;
+	border-top: 1px solid @grayDark;
+	font-family: @sansFontFamily;
+	padding: 30px 0;
+	text-align: center;
 }
 .footer p {
 	margin-bottom: 0;
 	color: @grayDarker;
+}
+.footer a {
+	color: @grayLight;
+
+	:visited {
+		color: @grayLighter;
+	}
 }
 .footer-links {
 	margin: 10px 0;

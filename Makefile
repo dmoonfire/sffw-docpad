@@ -28,9 +28,6 @@ collect:
 # Copy the stories into the working directory and then remove the
 # non-public files from the collection.
 	$(RSYNC_TEXT) lib/sffw/ $(COLLECT)
-	find $(COLLECT) -name "*.txt" -o -name "*.markdown" | xargs grep -L "Availability: Public" | xargs rm -f
-	find $(COLLECT) -name "index.xml" | xargs grep -L 'schema="Availability"' | xargs rm -f
-	find $(COLLECT) -name "index.xml" | xargs grep -L '<subjectterm>Public</subjectterm>' | xargs rm -f
 
 # Convert the Creole files into Markdown.
 	bin/creole2markdown --delete $(COLLECT)

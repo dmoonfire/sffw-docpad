@@ -73,7 +73,6 @@ sub process
 		# Create a modified
 		print " [TOC]\n" if $verbose;
 		push @indexes, $yaml;
-		return;
 	}
 
 	# Normalize the title for inclusion.
