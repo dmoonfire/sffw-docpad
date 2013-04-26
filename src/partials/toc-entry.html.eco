@@ -15,8 +15,11 @@
 
 	  <!-- Check to see if we have a different author. -->
 	  <% author = @include.author or @site.author %>
-	  <% if author != @site.author: %>
-	    <span class='different-author'>by <%= author %>
+
+	  <% if author: %>
+  	    <% if author != @document.title: %>
+	      <span class='different-author'>by <%= author %>
+	    <% end %>
 	  <% end %>
     </h3>
   </div>

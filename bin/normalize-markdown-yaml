@@ -29,7 +29,7 @@ while (<>)
 	# If we are in the YAML but not beyond it, normalize it.
 	if ($in_yaml && !$beyond_yaml)
 	{
-		if (s/^(\s*(- )?[A-Z]+)/PLACEHOLDER/)
+		if (s/^(\s*(- )?[A-Z]+)(\w*:)/PLACEHOLDER$3/)
 		{
 			my $lc = lc($1);
 			s/PLACEHOLDER/$lc/;

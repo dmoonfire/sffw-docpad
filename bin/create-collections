@@ -111,7 +111,7 @@ sub custom
 
 foreach my $theme (sort keys %themes)
 {
-	add_default_index("themes", "Theme", $theme);
+	add_default_index("t", "Theme", $theme);
 }
 
 #
@@ -148,6 +148,9 @@ foreach my $index (@indexes)
 
 	foreach my $page (@pages)
 	{
+		# We never include ourselves in a page.
+		next if $$page{basename} eq $basename;
+
 		# Go through the keys in the filter.
 		my $includePage = 1;
 
@@ -162,12 +165,12 @@ foreach my $index (@indexes)
 
 			# If the value is a sequence, then check contains.
 			my $value = $$page{$filterKey};
-			my $filterValue = $$filter{$filterKey};
+			my $filterValue = lc($$filter{$filterKey});
 
 			if (ref($value) eq "ARRAY")
 			{
 				# Only skip the page if the value isn't in the list.
-				my %params = map { $_ => 1 } @$value;
+				my %params = map { lc($_) => 1 } @$value;
 				unless (exists($params{$filterValue}))
 				{
 					$includePage = 0;
@@ -177,7 +180,7 @@ foreach my $index (@indexes)
 			else
 			{
 				# If the value doesn't match the filter, skip it.
-				unless ($value eq $filterValue)
+				unless (lc($value) eq $filterValue)
 				{
 					$includePage = 0;
 					last;
@@ -247,7 +250,7 @@ sub add_default_index
 			"title" => $name,
 			"filename" => $path,
 			"layout" => "toc",
-			"organization" => "Stories",
+			"organization" => "Examples",
 			"tagCollection" => $category,
 			"includesFilter" => \%filter,
 		);

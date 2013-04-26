@@ -61,6 +61,21 @@ generate: collect
 # Convert index files into Markdown.
 	bin/index2markdown --delete build/src/documents/
 
+# Update themes, sources, and authors to have their collections build
+# automatically.
+	for f in $$(find build/src/documents -name "*.markdown" | xargs grep -l "Type: Theme"); do\
+		cat $$f | perl -n -e 'print "layout: toc\norganization: Examples\nIncludesFilter:\n  Theme: $$1\n" if /^Title: (.*?)$$/ && $$1 ne "Themes";print;' > tmp; \
+		mv tmp $$f; \
+	done
+	for f in $$(find build/src/documents -name "*.markdown" | xargs grep -l "Type: Author"); do\
+		cat $$f | perl -n -e 'print "layout: toc\norganization: Sources\nIncludesFilter:\n  Author: $$1\n" if /^Title: (.*?)$$/ && $$1 ne "Authors";print;' > tmp; \
+		mv tmp $$f; \
+	done
+	for f in $$(find build/src/documents -name "*.markdown" | xargs grep -l "Type: ISBN"); do\
+		cat $$f | perl -n -e 'print "layout: toc\norganization: Characters\nIncludesFilter:\n  ISBN: $$1\n" if /^ISBN: (.*?)$$/ && $$1 ne "ISBNs";print;' > tmp; \
+		mv tmp $$f; \
+	done
+
 # Add in the page for those pages that don't have it.
 	for f in $$(find build/src/documents -name "*.markdown" | xargs grep -L 'layout: '); do \
 		cat $$f \
@@ -91,7 +106,7 @@ generate: collect
 	done
 
 # Create the taxonomies and collections.
-	bin/create-collections build/src/documents
+	bin/create-collections --verbose build/src/documents
 
 # Set up the breadcrumbs.
 	bin/create-breadcrumbs build/src/documents

@@ -44,44 +44,8 @@
       }
 }
 </style>
-
-<% if @document.redirectUrl: %>
-<script type="text/javascript">
-<!--
-function redirectDelay(){
-    window.location = "<%= @document.redirectUrl %>"
-}
-//-->
-</script>
-<% end %>
 </head>
-<% if @document.redirectUrl: %>
-<body onLoad="setTimeout('redirectDelay()', 10000)">
-<% else: %>
 <body>
-<% end %>
-  <% if @site.showWarning: %>
-  <!-- Content Warning -->
-  <div id="content-warning">
-	<div id="content-warning-background">
-	  <div id="content-warning-title">Warning!</div>
-	  <div id="content-warning-message">
-<p>You are about to enter a website that may contain content of an adult nature. These pages are designed for <strong>adults</strong> only and may include pictures and materials that some viewers may find offensive. If you are under the age of 21, if such material offends you or if it is illegal to view such material in your community please do not continue. The following terms and conditions apply to this site. Entering the site via the link below will constitute your agreement to the following terms and conditions:</p>
-
-<ul>
-<li>I am 21 years of age or older</li>
-<li>I accept all resposibility for my own actions; and</li>
-<li>I agree that I am legally bound to these Terms and Conditions</li>
-</ul>
-</div>
-	  <div id="content-warning-buttons">
-  	    <a class="btn btn-danger btn-large" onclick="acceptWarning()" href="javascript:void(0)">Enter</a>
-	    <a class="btn btn-large" href="http://www.google.com/">Exit</a>
-	  </div>
-    </div>
-  </div>
-  <% end %>
-
     <!-- Markup -->
     <div id="wrapper">
 	  <div id="inner-wrapper">
@@ -124,7 +88,23 @@ function redirectDelay(){
           <% end %>
 
 		  <!-- Contents -->
-  		  <%- @content %>
+		  <div class="row">
+			<div class="span9">
+  			  <%- @content %>
+			</div><!-- div.span9 -->
+			<div class="span3">
+			  <% if @document.theme: %>
+			    <div class="well sidebar-nav">
+				  <ul class="nav nav-list">
+				    <li class="nav-header">Themes</li>
+					<% for theme in @document.theme: %>
+					  <li><a href="/t/<%= theme.toLowerCase().replace(" ", "-") %>/"><%= theme %></a></li>
+					<% end %>
+				  </ul>
+			    </div>
+              <% end %>
+			</div>
+		  </div><!-- /div.row -->
         </div><!-- div.container -->
       </div><!-- /div#inner-wrapper -->
     </div><!-- div#wrapper -->
