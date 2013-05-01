@@ -29,6 +29,7 @@ GetOptions("verbose" => \$verbose);
 my @indexes = ();
 my @pages = ();
 my %themes = ();
+my %years = ();
 
 finddepth(\&process, @ARGV);
 
@@ -78,10 +79,15 @@ sub process
 	# Normalize the title for inclusion.
 	$$yaml{"title"} =~ s@^(A|An|The) (.*)$@$2, $1@;
 
-	# Check for themes.
+	# Check for themes and automatic indexes.
 	if (exists $$yaml{"theme"})
 	{
 		map { $themes{$_}++; } @{$$yaml{"theme"}};
+	}
+
+	if (exists $$yaml{"year"})
+	{
+		$years{$$yaml{"year"}}++;
 	}
 
 	# Add the page to the list.
@@ -112,6 +118,11 @@ sub custom
 foreach my $theme (sort keys %themes)
 {
 	add_default_index("t", "Theme", $theme);
+}
+
+foreach my $year (sort keys %years)
+{
+	add_default_index("y", "Year", $year);
 }
 
 #
@@ -252,6 +263,7 @@ sub add_default_index
 			"layout" => "toc",
 			"organization" => "Examples",
 			"tagCollection" => $category,
+			"type" => $category,
 			"includesFilter" => \%filter,
 		);
 		$yaml{"basename"} = $path;

@@ -64,8 +64,9 @@
                 <ul class="nav">
 				  <li><a href="/c/">Characters</a></li>
 				  <li><a href="/t/">Themes</a></li>
-				  <li><a href="/a/">Authors</a></li>
 				  <li><a href="/s/">Sources</a></li>
+				  <li><a href="/a/">Authors</a></li>
+				  <li><a href="/y/">Years</a></li>
                 </ul>
               </div><!--/.nav-collapse -->
             </div>
