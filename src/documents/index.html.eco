@@ -1,0 +1,44 @@
+---
+layout: default
+title: Welcome
+allowIncome: true
+---
+
+<article id="page" class="page">
+  <div class="row">
+    <div class="span8">
+      <h1><%= @document.title %></h1>
+
+	  <p>Welcome to the <em>Science Fiction and Fantasy Women</em> website. At <a href="http://wiscon.info">WisCon 37</a>, I (D. Moonfire) am scheduled to be on a panel entitled <a href="http://wiscon.piglet.org/program/detail?idItems=2032">The Female Soldier in Science Fiction and Fantasy</a>.</p>
+
+<blockquote>Science Fiction and Fantasy have long been telling stories about female soldiers and veterans, from Eowyn and Alanna, to "Aliens"'s Vasquez and "Firefly's Zoe," to comic book heroines like Batwoman and Captain Marvel. How do these portrayals explore the role of women in wartime, and in the professional military? Do tropes about female soldiers need to evolve as more women than ever take on military roles worldwide? Conversely, can speculative fiction about women and military service help to change the popular image of the contemporary soldier, which often reflects an exclusively male experience?</blockquote>
+
+<p>While I consider myself fairly wide-read, I figured it wouldn't hurt to document a bit of the research for this topic. That way, I won't sound quite as brain-dead as I feared.</p>
+    </div>
+
+    <div class="span4">
+      <h2><a href="/c/">Characters</a></h2>
+      <p>Unlike sites like <a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/HomePage">TV Troupes</a>, this site focuses on the characters first. There are references to specific books, movies, and creators, but the main reason of this site is to describe the portrayal of characters.</p>
+    </div>
+  </div><!-- /div.row -->
+
+  <div class="row">
+    <div class="span4">
+      <h3>Warnings</h3>
+
+	  <p>By the nature of the research and documentation, this site contains spoilers. Instead of protecting them behind CSS, I'm going to warn you right away and not worry about it.</p>
+    </div>
+	<div class="span4">
+	  <h3>Contributing</h3>
+
+	  <p>Because I'm trying to build up a taxonomy of characters and their portrayals, not everyone will agree with my interpretations or even observations. If you do, feel free to add a polite comment and we'll talk about it. If it makes sense, I'll be glad to make changes.</p>
+    </div>
+	<div class="span4">
+	  <h3>Flattr and Affiliate Programs</h3>
+
+	  <p>There are a few places where links to Amazon will have an affiliate program link in there. Feel free to avoid them, but the (small) amount money that comes from these programs will help defray the costs of running the website.</p>
+
+	  <p>Likewise, I have <a href="http://flattr.com/">Flattr</a> links for the same reason. If you want, donate a few cents. If you don't, don't worry about it. I'm going to run this site regardless of money.</p>
+	</div>
+  </div>
+</article>

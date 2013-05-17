@@ -68,6 +68,24 @@
 				  <li><a href="/a/">Authors</a></li>
 				  <li><a href="/y/">Years</a></li>
                 </ul>
+
+                <div class="nav pull-right">
+<!-- Income links -->
+<% if @document.allowIncome: %>
+  <div class="pull-right flattr-container">
+    <a class="FlattrButton" style="display: none;"
+       title="<%= @document.title %>"
+       data-flattr-uid="<%= @site.flattrUid %>"
+       data-flattr-tags="<%= @site.flattrTags %>"
+       data-flattr-category="text"
+	   data-flattr-hidden="0"
+	   data-flattr-button="compact"
+       href="http://sffw.moonfire.us<%= @document.url %>">
+      <%= @document.summary %>
+    </a>
+  </div>
+<% end %>
+                </div>
               </div><!--/.nav-collapse -->
             </div>
           </div><!-- div.navbar-inner -->
@@ -90,21 +108,9 @@
 
 		  <!-- Contents -->
 		  <div class="row">
-			<div class="span9">
+			<div class="span12">
   			  <%- @content %>
-			</div><!-- div.span9 -->
-			<div class="span3">
-			  <% if @document.theme: %>
-			    <div class="well sidebar-nav">
-				  <ul class="nav nav-list">
-				    <li class="nav-header">Themes</li>
-					<% for theme in @document.theme: %>
-					  <li><a href="/t/<%= theme.toLowerCase().replace(" ", "-") %>/"><%= theme %></a></li>
-					<% end %>
-				  </ul>
-			    </div>
-              <% end %>
-			</div>
+			</div><!-- div.span12 -->
 		  </div><!-- /div.row -->
         </div><!-- div.container -->
       </div><!-- /div#inner-wrapper -->

@@ -1,5 +1,7 @@
 # Define the Configuration
 docpadConfig = {
+  growl: false
+
   templateData:
     site:
       title: "Science Fiction and Fantasy Women"

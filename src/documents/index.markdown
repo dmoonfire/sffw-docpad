@@ -1,5 +1,0 @@
----
-Title: Welcome
----
-
-Hello.
